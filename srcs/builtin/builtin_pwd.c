@@ -1,15 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_global.c                                      :+:      :+:    :+:   */
+/*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chan <chan@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mkim2 <mkim2@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/29 19:46:38 by chan              #+#    #+#             */
-/*   Updated: 2026/06/29 19:46:43 by chan             ###   ########.fr       */
+/*   Created: 2026/07/23 20:43:19 by mkim2             #+#    #+#             */
+/*   Updated: 2026/07/24 17:16:24 by mkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int	g_exit_status = 0;
+int	builtin_pwd(void)
+{
+	char	buf[4096];
+
+	if (!getcwd(buf, sizeof(buf)))
+	{
+		perror("minishell: pwd");
+		return (1);
+	}
+	ft_putstr(buf, 1);
+	ft_putstr("\n", 1);
+	return (0);
+}

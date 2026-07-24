@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chan <chan@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mkim2 <mkim2@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/29 19:56:13 by chan              #+#    #+#             */
-/*   Updated: 2026/06/29 20:02:21 by chan             ###   ########.fr       */
+/*   Updated: 2026/07/23 18:53:30 by mkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ t_cmd	*create_cmd(t_token *tokens)
 	cmd->outfile = NULL;
 	cmd->append = 0;
 	cmd->heredoc = 0;
+	cmd->heredoc_fd = -1;
 	cmd->next = NULL;
 	parse_redirection(cmd, tokens);
 	return (cmd);

@@ -4,15 +4,6 @@ CC          = cc
 CFLAGS      = -Wall -Wextra -Werror
 
 SRC         =   srcs/main.c \
-                srcs/main_global.c \
-                srcs/builtin/builtin.c \
-                srcs/builtin/echo.c \
-                srcs/builtin/pwd.c \
-                srcs/builtin/env.c \
-                srcs/builtin/cd.c \
-                srcs/builtin/exit.c \
-                srcs/builtin/export.c \
-                srcs/builtin/unset.c \
                 srcs/lexer/lexer.c \
                 srcs/lexer/lexer_word.c \
                 srcs/lexer/lexer_operator.c \
@@ -27,12 +18,14 @@ SRC         =   srcs/main.c \
                 srcs/syntax/syntax_redir.c \
 				srcs/syntax/syntax_quote.c \
                 srcs/executor/executor.c \
+				srcs/executor/executor_utils.c \
                 srcs/executor/path_utils.c \
                 srcs/executor/path.c \
                 srcs/executor/pipe.c \
                 srcs/executor/pipe_child.c \
                 srcs/executor/redirection.c \
                 srcs/executor/heredoc.c \
+				srcs/executor/heredoc_utils.c \
                 srcs/expand/expand.c \
                 srcs/expand/expand_utils.c \
 				srcs/expand/expand_variable.c \
@@ -46,12 +39,25 @@ SRC         =   srcs/main.c \
                 srcs/utils/ft_strjoin3.c \
                 srcs/utils/ft_split.c \
 				srcs/utils/ft_strncmp.c \
-                srcs/utils/ft_itoa.c
+                srcs/utils/ft_itoa.c \
+				srcs/utils/ft_putstr.c\
+				srcs/utils/cleanup.c\
+				srcs/builtin/builtin_cd.c\
+				srcs/builtin/builtin_echo.c\
+				srcs/builtin/builtin_env.c\
+				srcs/builtin/builtin_exit.c\
+				srcs/builtin/builtin_export_print.c\
+				srcs/builtin/builtin_export.c\
+				srcs/builtin/builtin_pwd.c\
+				srcs/builtin/builtin_unset.c\
+				srcs/builtin/builtin_utils.c\
+				srcs/builtin/builtin.c\
+				srcs/builtin/env_tools.c
 
 OBJ_DIR     = obj
 OBJ         = $(patsubst srcs/%, $(OBJ_DIR)/%, $(SRC:.c=.o))
 
-INCLUDES    = -Iinclude
+INCLUDES    = -Iincludes
 
 READLINE    = -lreadline
 

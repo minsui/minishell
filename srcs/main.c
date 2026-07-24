@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chan <chan@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mkim2 <mkim2@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 19:25:01 by chan              #+#    #+#             */
-/*   Updated: 2026/06/29 20:08:56 by chan             ###   ########.fr       */
+/*   Updated: 2026/07/24 17:09:25 by mkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int g_signal = 0;
 
 static int	check_syntax(char *line, t_token *tokens)
 {
@@ -34,21 +36,20 @@ static int	check_syntax(char *line, t_token *tokens)
 
 static void	process_line(char *line, t_shell *shell)
 {
-	t_token	*tokens;
-	t_cmd	*cmd;
-
-	tokens = lexer(line);
-	if (check_syntax(line, tokens))
+	shell->tokens = lexer(line);
+	if (check_syntax(line, shell->tokens))
 	{
-		free_tokens(tokens);
+		free_tokens(shell->tokens);
+		shell->tokens = NULL;
 		return ;
 	}
-	expand_tokens(tokens, shell);
-	print_tokens(tokens);
-	cmd = parse_tokens(tokens);
-	execute(cmd, shell);
-	free_tokens(tokens);
-	free_cmds(cmd);
+	expand_tokens(shell->tokens, shell);
+	shell->cmds = parse_tokens(shell->tokens);
+	execute(shell->cmds, shell);
+	free_tokens(shell->tokens);
+	free_cmds(shell->cmds);
+	shell->tokens = NULL;
+	shell->cmds = NULL;
 }
 
 void	shell_loop(t_shell *shell)
@@ -59,6 +60,11 @@ void	shell_loop(t_shell *shell)
 	while (1)
 	{
 		line = readline("minishell$ ");
+		if (g_signal == SIGINT) 
+		{
+			shell->exit_status = 130;
+			g_signal = 0;
+		}
 		if (!line)
 		{
 			printf("exit\n");

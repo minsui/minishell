@@ -1,0 +1,12 @@
+total 56
+drwxr-xr-x  6 mkim2 2025_gyeongsan   134  7월 24 17:31 .
+drwx------ 30 mkim2 2025_gyeongsan  4096  7월 24 15:31 ..
+-rw-r--r--  1 mkim2 2025_gyeongsan     0  7월 24 16:38 file
+drwxr-xr-x  8 mkim2 2025_gyeongsan   163  7월 21 12:52 .git
+drwxr-xr-x  2 mkim2 2025_gyeongsan    25  7월 21 12:51 includes
+-rw-r--r--  1 mkim2 2025_gyeongsan  2379  7월 24 17:20 Makefile
+-rwxr-xr-x  1 mkim2 2025_gyeongsan 43760  7월 24 17:23 minishell
+drwxr-xr-x 10 mkim2 2025_gyeongsan   134  7월 24 17:23 obj
+-rw-r--r--  1 mkim2 2025_gyeongsan     0  7월 24 17:31 out.txt
+-rw-r--r--  1 mkim2 2025_gyeongsan  2231  7월 21 12:51 README.md
+drwxr-xr-x 10 mkim2 2025_gyeongsan   134  7월 23 20:02 srcs

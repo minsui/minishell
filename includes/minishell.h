@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chan <chan@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mkim2 <mkim2@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/28 19:25:10 by chan              #+#    #+#             */
-/*   Updated: 2026/06/30 14:01:50 by chan             ###   ########.fr       */
+/*   Updated: 2026/07/24 17:13:45 by mkim2            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_cmd
 	char			*outfile;
 	int				append;
 	int				heredoc;
+	int				heredoc_fd;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -66,38 +67,55 @@ typedef struct s_shell
 {
 	char	**env;
 	int		exit_status;
+	t_token	*tokens;
+	t_cmd	*cmds;
 }	t_shell;
 
-extern int	g_exit_status;
+void	shell_cleanup(t_shell *shell);
+
+extern int g_signal;
 
 /* builtin */
 int		is_builtin(char *cmd);
-int		execute_builtin(t_cmd *cmd, char ***envp);
+int		execute_builtin(t_cmd *cmd, t_shell *shell);
 int		builtin_echo(char **argv);
 int		builtin_pwd(void);
-int		builtin_env(char **envp);
-int		builtin_cd(char **argv);
-int		builtin_exit(char **argv);
-int		builtin_export(char **argv, char ***envp);
-int		builtin_unset(char **argv, char ***envp);
+int		builtin_env(t_shell *shell);
+int		builtin_cd(char **argv, t_shell *shell);
+int		builtin_exit(char **argv, t_shell *shell);
+int		builtin_export(char **argv, t_shell *shell);
+int		builtin_unset(char **argv, t_shell *shell);
+int		print_export(t_shell *shell);
+int		is_valid_id(char *s);
+void	id_error(char *cmd, char *arg);
+int		ft_strcmp(char *s1, char *s2);
+
+/* env */
+int		env_key_len(char *s);
+int		env_find(char **env, char *key);
+int		env_put(t_shell *shell, char *entry);
+int		env_remove(t_shell *shell, char *key);
 
 /* executor */
 char	*get_path(char *cmd, char **envp);
 char	*find_env(char *name, char **envp);
 void	free_split(char **arr);
 void	execute(t_cmd *cmds, t_shell *shell);
-void	execute_pipeline(t_cmd *cmds, char **envp);
+void	execute_pipeline(t_cmd *cmds, t_shell *shell);
 void	execute_command(t_cmd *cmd, t_shell *shell);
-void	handle_redirection(t_cmd *cmd);
-void	exec_child(t_cmd *cmd, int prev_fd, int *fd, char **envp);
-void	handle_heredoc(t_cmd *cmd);
+int		handle_redirection(t_cmd *cmd);
+void	exec_child(t_cmd *cmd, int prev_fd, int *fd, t_shell *shell);
+void	run_builtin_in_parent(t_cmd *cmd, t_shell *shell);
+void	child_process(t_cmd *cmd, t_shell *shell);
+void	store_status(int status, t_shell *shell);
+int		fill_heredoc_pipe(char *delimiter);
+int		prepare_heredocs(t_cmd *cmds, t_shell *shell);
+void	close_heredocs(t_cmd *cmds);
 
 /* expand */
 void	expand_tokens(t_token *tokens, t_shell *shell);
 char	*expand_variable(char *str, t_shell *shell);
 char	*get_env_value(char *name, t_shell *shell);
-char	*extract_var_name(char *str, int *i);
-char	*expand_string(char *str, char **envp);
 
 /* lexer */
 t_token	*lexer(char *line);
@@ -113,7 +131,6 @@ void	skip_spaces(char *line, int *i);
 /* token */
 t_token	*new_token(char *value, t_token_type type, t_quote_type quote);
 void	add_token_back(t_token **head, t_token *new);
-void	print_tokens(t_token *head);
 void	free_tokens(t_token *head);
 
 /* parser */
@@ -147,6 +164,7 @@ int		ft_strlen(const char *s);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_isalnum(int c);
 char	*ft_itoa(int n);
+void	ft_putstr(char *s, int fd);
 
 /* main */
 void	shell_loop(t_shell *shell);
